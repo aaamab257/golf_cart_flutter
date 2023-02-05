@@ -21,6 +21,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool is_driver = false;
+  bool search_for_driver = false;
+  TextEditingController _addressController = TextEditingController();
   @override
   void initState() {
     addMarkers();
@@ -29,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
 
   PolylinePoints polylinePoints = PolylinePoints();
 
-  String googleAPiKey = "AIzaSyDrpIXU4NYNjhsi9UzPp_hbdIg9aFzE0SA";
+  String googleAPiKey = "AIzaSyCZVhSxXxklm1gTrpb7JnIOE5m6wWfvmz4";
 
   Set<Marker> markers = Set(); //markers for google map
   Map<PolylineId, Polyline> polylines = {}; //polylines to show direction
@@ -171,6 +173,7 @@ class _MainScreenState extends State<MainScreen> {
                             padding: EdgeInsets.only(
                                 bottom: 15, left: 10, right: 10),
                             child: TextFormField(
+                              controller: _addressController,
                               keyboardType: TextInputType.text,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -189,6 +192,22 @@ class _MainScreenState extends State<MainScreen> {
                                   .nextFocus(), // move focus to next
                             ),
                           ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: OutlinedButton(
+                              onPressed: () {
+                                if (!_addressController.text.isEmpty) {
+                                  setState(() {
+                                    search_for_driver = true;
+                                  });
+                                }
+                              },
+                              child: Text(
+                                'Ride Now',
+                                style: TextStyle(color: Colors.green),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                 is_driver
