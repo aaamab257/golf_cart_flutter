@@ -11,6 +11,9 @@ import 'package:loginandregister_flutter/Screens/common.dart';
 import 'package:loginandregister_flutter/Screens/drwar.dart';
 import 'package:loginandregister_flutter/Screens/select_address.dart';
 import 'package:shimmer/shimmer.dart';
+import '../Screens/address_search.dart';
+import '../Screens/places_services.dart';
+import 'package:uuid/uuid.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key key}) : super(key: key);
@@ -20,8 +23,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  bool is_driver = false;
+  bool is_driver = true;
   bool search_for_driver = false;
+  bool driving_to_student = false;
+  bool trip_rejected = false;
   TextEditingController _addressController = TextEditingController();
   @override
   void initState() {
@@ -30,7 +35,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   PolylinePoints polylinePoints = PolylinePoints();
-
+  final _controller = TextEditingController();
   String googleAPiKey = "AIzaSyCZVhSxXxklm1gTrpb7JnIOE5m6wWfvmz4";
 
   Set<Marker> markers = Set(); //markers for google map
@@ -152,96 +157,213 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
                 is_driver
-                    ? tripFromTo(context)
-                    : Column(
-                        children: [
-                          ListTile(
-                            title: Text(
-                              'Where Are you Going !',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            title: Text(
-                              'Select or type your trip here ...',
-                              style: TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.normal),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                bottom: 15, left: 10, right: 10),
-                            child: TextFormField(
-                              controller: _addressController,
-                              keyboardType: TextInputType.text,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Where are you going ?';
-                                }
-                                return null;
-                              },
-                              decoration: new InputDecoration(
-                                labelText: 'Where are you going !',
-                                border: OutlineInputBorder(),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 15.0, horizontal: 10.0),
-                              ),
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .nextFocus(), // move focus to next
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: OutlinedButton(
-                              onPressed: () {
-                                if (!_addressController.text.isEmpty) {
-                                  setState(() {
-                                    search_for_driver = true;
-                                  });
-                                }
-                              },
-                              child: Text(
-                                'Ride Now',
-                                style: TextStyle(color: Colors.green),
-                              ),
+                    ? trip_rejected
+                        ? Padding(
+                            padding: EdgeInsets.all(25),
+                            child: Text(
+                              'Wait for Another Trip ...',
+                              style: TextStyle(color: Colors.green),
                             ),
                           )
-                        ],
-                      ),
+                        : tripFromTo(context)
+                    : search_for_driver
+                        ? Padding(
+                            padding: const EdgeInsets.all(50.0),
+                            child: Text(
+                              'Waiting for your driver ',
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'Where Are you Going !',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Select or type your trip here ...',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: 15, left: 10, right: 10),
+                                child: TextFormField(
+                                  onTap: () async {
+                                    final sessionToken = Uuid().v4();
+                                    final Suggestion result = await showSearch(
+                                      context: context,
+                                      delegate: AddressSearch(sessionToken),
+                                    );
+                                    // This will change the text displayed in the TextField
+                                    if (result != null) {
+                                      final placeDetails =
+                                          await PlaceApiProvider(sessionToken)
+                                              .getPlaceDetailFromId(
+                                                  result.placeId);
+                                      setState(() {
+                                        _addressController.text =
+                                            result.description;
+                                        _addressController.text =
+                                            'القبول والتسجيل';
+                                      });
+                                    }
+                                  },
+                                  controller: _addressController,
+                                  keyboardType: TextInputType.text,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return 'Where are you going ?';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: new InputDecoration(
+                                    labelText: 'Where are you going !',
+                                    border: OutlineInputBorder(),
+                                    contentPadding: new EdgeInsets.symmetric(
+                                        vertical: 15.0, horizontal: 10.0),
+                                  ),
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context)
+                                          .nextFocus(), // move focus to next
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    if (!_addressController.text.isEmpty) {
+                                      setState(() {
+                                        search_for_driver = true;
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    'Ride Now',
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                 is_driver
                     ? Container(
                         height: 80,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: OutlinedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  'Accept',
-                                  style: TextStyle(color: Colors.green),
-                                ),
-                              ),
-                            )),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: OutlinedButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'Reject',
-                                    style: TextStyle(color: Colors.red),
+                        child: driving_to_student
+                            ? Text(
+                                'Driving to Student ... ',
+                                style: TextStyle(color: Colors.green),
+                              )
+                            : trip_rejected
+                                ? Padding(
+                                    padding: EdgeInsets.all(25),
+                                    child: SizedBox())
+                                : Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                          child: Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (ctx) => AlertDialog(
+                                                title: const Text(
+                                                    "Student waiting ..."),
+                                                content: const Text(
+                                                    "Student Location : كلية الاداب والعلوم"),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        driving_to_student =
+                                                            true;
+                                                        Navigator.of(ctx).pop();
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.green,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              14),
+                                                      child: const Text(
+                                                        "Okay",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'Accept',
+                                            style:
+                                                TextStyle(color: Colors.green),
+                                          ),
+                                        ),
+                                      )),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: OutlinedButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (ctx) => AlertDialog(
+                                                  title: const Text("Rejected"),
+                                                  content: const Text(
+                                                      "Are you sure to reject this trip !"),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          trip_rejected = true;
+                                                          Navigator.of(ctx)
+                                                              .pop();
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        color: Colors.red,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(14),
+                                                        child: const Text(
+                                                          "Reject",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              'Reject',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
                       )
                     : SizedBox()
               ],
@@ -267,7 +389,7 @@ class _MainScreenState extends State<MainScreen> {
         ListTile(
             leading: Icon(Icons.person_pin_circle),
             title: Text(
-              'Collage on Computer Science',
+              'كلية الاداب والعلوم',
               overflow: TextOverflow.ellipsis,
             ),
             subtitle: Row(children: [
