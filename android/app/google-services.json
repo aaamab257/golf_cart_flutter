@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "914673627270",
+    "project_id": "golf-cart-d5475",
+    "storage_bucket": "golf-cart-d5475.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914673627270:android:6978b82e721a56d3b52107",
+        "android_client_info": {
+          "package_name": "com.jeddah.golfcart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914673627270-avl8r3bnoq2s4m1km5uahotl05l6ja4k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwqCWQikJiNU_VLvFs7j9NMztVzS7d_IU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914673627270-avl8r3bnoq2s4m1km5uahotl05l6ja4k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

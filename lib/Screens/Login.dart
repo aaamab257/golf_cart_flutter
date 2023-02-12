@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:loginandregister_flutter/Screens/Register.dart';
+import 'package:loginandregister_flutter/Screens/widgets/loading.dart';
 import 'package:loginandregister_flutter/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/custom_snackbar.dart';
+import '../providers/user.dart';
+import 'Home.dart';
 import 'MainScreen.dart';
+import 'helpers/screen_navigation.dart';
 
 class LoginPageScreen extends StatefulWidget {
   LoginPageScreen({Key key, this.title}) : super(key: key);
@@ -19,6 +23,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   bool _showPassword = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  final _key = GlobalKey<ScaffoldState>();
 
   void _togglevisibility() {
     setState(() {
@@ -28,16 +33,15 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authsProvider = Provider.of<UserProvider>(context);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      key: _key,
       appBar: AppBar(
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Colors.blueAccent, //change your color here
-        ),
-        leading: Icon(Icons.keyboard_arrow_left),
-        backgroundColor: Colors.white,
+        title: Text('Login'),
+        centerTitle: true,
       ),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(child: Consumer<AuthProvider>(
           builder: (context, authProvider, child) {
@@ -64,7 +68,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: new TextFormField(
-                          controller: _emailController,
+                          controller: authsProvider.email,
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value.isEmpty) {
@@ -86,7 +90,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: _passwordController,
+                          controller: authsProvider.password,
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) => FocusScope.of(context)
                               .nextFocus(), // move focus to next
@@ -146,12 +150,21 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30)),
                           child: TextButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              if (!await authsProvider.signIn()) {
+                                print('in fun');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Login failed")));
+                                return;
+                              }
+                              print('out of fun');
+                              authsProvider.clearController();
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => MainScreen()),
                                   (route) => false);
+
                               /*if (_emailController.text == '') {
                                 /*setState(() {
                                     _validateEmail = true;
@@ -198,10 +211,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RegisterPageScreen()));
+                          changeScreen(context, RegisterPageScreen());
                         },
                         child: Container(
                           padding: EdgeInsets.all(30),

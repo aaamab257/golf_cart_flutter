@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:loginandregister_flutter/Screens/Home.dart';
 import 'package:loginandregister_flutter/Screens/Login.dart';
+import 'package:loginandregister_flutter/Screens/widgets/loading.dart';
+import 'package:loginandregister_flutter/providers/app_state.dart';
 import 'package:loginandregister_flutter/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/custom_snackbar.dart';
 import '../model/register_request.dart';
+import '../providers/user.dart';
 import 'MainScreen.dart';
+import 'helpers/screen_navigation.dart';
 
 enum Type {
   student,
@@ -39,6 +43,9 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
   }
 
   Widget build(BuildContext context) {
+    UserProvider authsProvider = Provider.of<UserProvider>(context);
+    AppStateProvider app = Provider.of<AppStateProvider>(context);
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -77,7 +84,7 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: new TextFormField(
-                              controller: _nameController,
+                              controller: authsProvider.name,
                               keyboardType: TextInputType.text,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -99,7 +106,7 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: new TextFormField(
-                              controller: _phoneController,
+                              controller: authsProvider.phone,
                               keyboardType: TextInputType.phone,
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -120,119 +127,9 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    isScrollControlled: true,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(15.0),
-                                      ),
-                                    ),
-                                    builder: (context) {
-                                      return Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.5,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        margin: EdgeInsets.all(15.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              'Type',
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                            SizedBox(
-                                              height: 30,
-                                            ),
-                                            ListTile(
-                                              title: Text(
-                                                'Student',
-                                              ),
-                                              leading: Radio<Type>(
-                                                value: Type.student,
-                                                groupValue: _type,
-                                                onChanged: (Type value) {
-                                                  setState(() {
-                                                    _type = value;
-                                                    type = 'Student';
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                              onTap: () {
-                                                setState(() {
-                                                  type = 'Student';
-                                                });
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            ListTile(
-                                              title: Text(
-                                                'Driver',
-                                              ),
-                                              leading: Radio<Type>(
-                                                value: Type.driver,
-                                                groupValue: _type,
-                                                onChanged: (Type value) {
-                                                  setState(() {
-                                                    _type = value;
-                                                    type = 'Driver';
-                                                  });
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                              onTap: () {
-                                                setState(() {
-                                                  type = 'Driver';
-                                                });
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 45,
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '${type}',
-                                      style: TextStyle(
-                                          color: Colors.grey[400],
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey, spreadRadius: 1),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
                             child: new TextFormField(
                               keyboardType: TextInputType.emailAddress,
-                              controller: _emailController,
+                              controller: authsProvider.email,
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return 'Email Field must not be empty';
@@ -253,7 +150,7 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
-                              controller: _passwordController,
+                              controller: authsProvider.password,
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) => FocusScope.of(context)
                                   .nextFocus(), // move focus to next
@@ -293,47 +190,6 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              controller: _password2Controller,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .nextFocus(), // move focus to next
-                              obscureText: !_showPassword,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Password Field must not be empty';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                hintText: "Confirm Password",
-                                border: OutlineInputBorder(),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 15.0, horizontal: 10.0),
-                                suffixIcon: GestureDetector(
-                                  onTap: () {
-                                    _togglevisibility();
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: 70,
-                                    padding: EdgeInsets.symmetric(vertical: 13),
-                                    child: Center(
-                                      child: Text(
-                                        _showPassword ? "Hide" : "Show",
-                                        style: TextStyle(
-                                            color: Colors.blueAccent,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30)),
@@ -345,74 +201,97 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30)),
                               child: TextButton(
-                                onPressed: () {
-                                  if (_nameController.text.isEmpty) {
-                                    showCustomSnackBar(
-                                        'Please Enter your name', context);
-                                  } else if (_phoneController.text.isEmpty) {
-                                    showCustomSnackBar(
-                                        'Please Enter your Phone number',
-                                        context);
-                                  } else if (_passwordController.text.isEmpty) {
-                                    showCustomSnackBar(
-                                        'Please Enter your Password', context);
-                                  } else if (_password2Controller
-                                      .text.isEmpty) {
-                                    showCustomSnackBar(
-                                        'Please Confirm your password',
-                                        context);
-                                  } else if (_passwordController.text !=
-                                      _password2Controller.text) {
-                                    showCustomSnackBar(
-                                        'Passwords do not match', context);
-                                  } else if (_phoneController.text.length >
-                                          10 &&
-                                      _phoneController.text.length < 10) {
-                                    showCustomSnackBar(
-                                        'Phone Number not valid', context);
-                                  } else if (!_phoneController.text
-                                      .startsWith('05')) {
-                                    showCustomSnackBar(
-                                        'Phone Number Must start with 05',
-                                        context);
-                                  } else {
-                                    String email = _emailController.text;
-                                    String name = _nameController.text;
-                                    String phone = _phoneController.text;
-                                    String password = _passwordController.text;
-                                    String password2 =
-                                        _password2Controller.text;
-                                    bool accountType =
-                                        type == 'Student' ? false : true;
-                                    SignUpModel signUpModel = SignUpModel(
-                                        email: email,
-                                        name: name,
-                                        phone: phone,
-                                        password: password,
-                                        password2: password2,
-                                        is_driver: accountType,
-                                        is_admin: false);
-                                    register
-                                        .register(signUpModel)
-                                        .then((status) {
-                                      if (register.code == 201) {
-                                        showCustomSnackBar(
-                                            'Your account created successfully',
-                                            context);
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MainScreen()),
-                                            (route) => false);
-                                      } else {
-                                        showCustomSnackBar(
-                                            'Something Error , please try again',
-                                            context);
-                                      }
-                                    });
+                                onPressed: () async {
+                                  if (!await authsProvider.signUp()) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text("Registration failed!")));
+
+                                    return;
                                   }
+                                  authsProvider.clearController();
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MainScreen()),
+                                      (route) => false);
                                 },
+                                // if (_nameController.text.isEmpty) {
+                                //   showCustomSnackBar(
+                                //       'Please Enter your name',
+                                //       context);
+                                // } else if (_phoneController
+                                //     .text.isEmpty) {
+                                //   showCustomSnackBar(
+                                //       'Please Enter your Phone number',
+                                //       context);
+                                // } else if (_passwordController
+                                //     .text.isEmpty) {
+                                //   showCustomSnackBar(
+                                //       'Please Enter your Password',
+                                //       context);
+                                // } else if (_password2Controller
+                                //     .text.isEmpty) {
+                                //   showCustomSnackBar(
+                                //       'Please Confirm your password',
+                                //       context);
+                                // } else if (_passwordController.text !=
+                                //     _password2Controller.text) {
+                                //   showCustomSnackBar(
+                                //       'Passwords do not match',
+                                //       context);
+                                // } else if (_phoneController
+                                //             .text.length >
+                                //         10 &&
+                                //     _phoneController.text.length < 10) {
+                                //   showCustomSnackBar(
+                                //       'Phone Number not valid',
+                                //       context);
+                                // } else if (!_phoneController.text
+                                //     .startsWith('05')) {
+                                //   showCustomSnackBar(
+                                //       'Phone Number Must start with 05',
+                                //       context);
+                                // } else {
+                                //   String email = _emailController.text;
+                                //   String name = _nameController.text;
+                                //   String phone = _phoneController.text;
+                                //   String password =
+                                //       _passwordController.text;
+                                //   String password2 =
+                                //       _password2Controller.text;
+                                //   bool accountType =
+                                //       type == 'Student' ? false : true;
+                                //   SignUpModel signUpModel = SignUpModel(
+                                //       email: email,
+                                //       name: name,
+                                //       phone: phone,
+                                //       password: password,
+                                //       password2: password2,
+                                //       is_driver: accountType,
+                                //       is_admin: false);
+                                //   register
+                                //       .register(signUpModel)
+                                //       .then((status) {
+                                //     if (register.code == 201) {
+                                //       showCustomSnackBar(
+                                //           'Your account created successfully',
+                                //           context);
+                                //       Navigator.pushAndRemoveUntil(
+                                //           context,
+                                //           MaterialPageRoute(
+                                //               builder: (context) =>
+                                //                   MainScreen()),
+                                //           (route) => false);
+                                //     } else {
+                                //       showCustomSnackBar(
+                                //           'Something Error , please try again',
+                                //           context);
+                                //     }
+                                //   });
+                                // }
+
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.blue,
                                   minimumSize: Size(

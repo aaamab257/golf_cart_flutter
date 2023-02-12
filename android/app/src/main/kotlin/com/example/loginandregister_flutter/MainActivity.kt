@@ -1,4 +1,4 @@
-package com.example.loginandregister_flutter
+package com.jeddah.golfcart
 
 import io.flutter.embedding.android.FlutterActivity
 
