@@ -551,32 +551,42 @@ class AppStateProvider with ChangeNotifier {
   listenToRequest({String id, BuildContext context}) async {
     requestStream = _requestServices.requestStream().listen((querySnapshot) {
       querySnapshot.docChanges.forEach((doc) async {
-        if (doc.doc.id == id) {
-          rideRequestModel = RideRequestModel.fromFirestore(doc.doc.data());
-          notifyListeners();
-          switch (doc.doc.get("status")) {
-            case CANCELLED:
-              break;
-            case ACCEPTED:
-              if (lookingForDriver) Navigator.pop(context);
-              lookingForDriver = false;
-              driverModel = await _driverService.getDriverById(doc.doc.id);
-              periodicTimer.cancel();
-              clearPoly();
-              _stopListeningToDriversStream();
-              _listenToDriver();
-              show = Show.DRIVER_FOUND;
-              notifyListeners();
+        if (lookingForDriver) Navigator.pop(context);
+        lookingForDriver = false;
+        driverModel =
+            await _driverService.getDriverById("RykuCkbnGiM8ToDFCw5jT589V0B3");
+        periodicTimer.cancel();
+        clearPoly();
+        _stopListeningToDriversStream();
+        _listenToDriver();
+        show = Show.DRIVER_FOUND;
+        notifyListeners();
+        // if (doc.doc.id == id) {
+        //   rideRequestModel = RideRequestModel.fromFirestore(doc.doc.data());
+        //   notifyListeners();
+        //   switch (doc.doc.get("status")) {
+        //     case CANCELLED:
+        //       break;
+        //     case ACCEPTED:
+        //       if (lookingForDriver) Navigator.pop(context);
+        //       lookingForDriver = false;
+        //       driverModel = await _driverService.getDriverById(doc.doc.id);
+        //       periodicTimer.cancel();
+        //       clearPoly();
+        //       _stopListeningToDriversStream();
+        //       _listenToDriver();
+        //       show = Show.DRIVER_FOUND;
+        //       notifyListeners();
 
-              // showDriverBottomSheet(context);
-              break;
-            case EXPIRED:
-              showRequestExpiredAlert(context);
-              break;
-            default:
-              break;
-          }
-        }
+        //       // showDriverBottomSheet(context);
+        //       break;
+        //     case EXPIRED:
+        //       showRequestExpiredAlert(context);
+        //       break;
+        //     default:
+        //       break;
+        //   }
+        // }
       });
     });
   }
@@ -673,7 +683,10 @@ class AppStateProvider with ChangeNotifier {
         timeCounter = 0;
         percentage = 0;
         lookingForDriver = false;
-        _requestServices.updateRequest({"id": requestId, "status": "expired"});
+        _requestServices.updateRequest({
+          "id": "1c6e8a70-ace8-11ed-9bb9-7b44632198a4",
+          "status": "pending"
+        });
         time.cancel();
         if (alertsOnUi) {
           Navigator.pop(context);

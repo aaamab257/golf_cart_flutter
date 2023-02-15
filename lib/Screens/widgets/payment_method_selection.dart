@@ -123,6 +123,7 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
                                               LinearPercentIndicator(
                                                 lineHeight: 4,
                                                 animation: true,
+                                              
                                                 animationDuration: 100000,
                                                 percent: 1,
                                                 backgroundColor: Colors.grey
