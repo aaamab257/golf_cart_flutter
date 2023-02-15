@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:rating_dialog/rating_dialog.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -8,6 +8,7 @@ import 'package:loginandregister_flutter/providers/app_state.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../MainScreen.dart';
 import '../helpers/style.dart';
 import '../locators/service_locator.dart';
 import 'custom_text.dart';
@@ -170,33 +171,41 @@ class DriverFoundWidget extends StatelessWidget {
                   ],
                 ),
                 Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: CustomText(
-                        text: "Ride price",
-                        size: 18,
-                        weight: FontWeight.bold,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: CustomText(
-                        text: "\$${appState.ridePrice}",
-                        size: 18,
-                        weight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      var _dialog = RatingDialog(
+                        // your app's name?
+                        title: Text('Rate Driver'),
+                        // encourage your user to leave a high rating?
+                        message: Text(
+                            'Select Number of Stars 1 - 5 to Rate This Driver'),
+
+                        // your app's logo?
+                        image: const FlutterLogo(size: 60),
+
+                        onCancelled: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainScreen()),
+                              (route) => false);
+                        },
+                        onSubmitted: (response) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainScreen()),
+                              (route) => false);
+                          // Navigator.of(context).pop();
+                          //appState.cancelRequest();
+                        },
+                        submitButtonText: 'Submit',
+                      );
+                    },
                     child: CustomText(
-                      text: "Cancel Ride",
+                      text: "Finish Ride",
                       color: white,
                     ),
                   ),

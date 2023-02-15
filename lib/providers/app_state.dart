@@ -624,7 +624,7 @@ class AppStateProvider with ChangeNotifier {
   cancelRequest() {
     lookingForDriver = false;
     _requestServices
-        .updateRequest({"id": rideRequestModel.id, "status": "cancelled"});
+        .updateRequest({"id": rideRequestModel.id, "status": "pending"});
     periodicTimer.cancel();
     notifyListeners();
   }

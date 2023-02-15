@@ -4,6 +4,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loginandregister_flutter/Screens/Login.dart';
 import 'package:loginandregister_flutter/Screens/helpers/style.dart';
+import 'package:loginandregister_flutter/Screens/volunteer_screen.dart';
 import 'package:loginandregister_flutter/Screens/widgets/custom_text.dart';
 import 'package:loginandregister_flutter/Screens/widgets/destination_selection.dart';
 import 'package:loginandregister_flutter/Screens/widgets/driver_found.dart';
@@ -73,6 +74,13 @@ class _MyHomePageState extends State<MainScreen> {
               onTap: () {
                 userProvider.signOut();
                 changeScreenReplacement(context, LoginPageScreen());
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: CustomText(text: "Join As Volunteer"),
+              onTap: () {
+                changeScreenReplacement(context, VolunteerForm());
               },
             )
           ],
