@@ -190,6 +190,47 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
+                            child: TextFormField(
+                              controller: authsProvider.confirmPass,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) => FocusScope.of(context)
+                                  .nextFocus(), // move focus to next
+                              obscureText: !_showPassword,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Confirm Password Field must not be empty';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: "Confirm Password",
+                                border: OutlineInputBorder(),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 15.0, horizontal: 10.0),
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    _togglevisibility();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    width: 70,
+                                    padding: EdgeInsets.symmetric(vertical: 13),
+                                    child: Center(
+                                      child: Text(
+                                        _showPassword ? "Hide" : "Show",
+                                        style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30)),
