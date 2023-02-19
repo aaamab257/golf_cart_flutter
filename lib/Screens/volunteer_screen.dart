@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../helpers/custom_snackbar.dart';
 import '../providers/auth_provider.dart';
 import 'Login.dart';
+import 'MainScreen.dart';
 
 class VolunteerForm extends StatefulWidget {
   @override
@@ -161,7 +162,26 @@ class _VolunteerFormState extends State<VolunteerForm> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30)),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  AlertDialog(
+                                    title: Text('Volunteer Request'),
+                                    content:
+                                        Text('Your Request sent successfully'),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MainScreen()),
+                                              (route) => false);
+                                        },
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.blue,
                                   minimumSize: Size(

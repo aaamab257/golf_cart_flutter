@@ -166,27 +166,6 @@ class TripWidget extends StatelessWidget {
                   ],
                 ),
                 Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: CustomText(
-                        text: "Ride price",
-                        size: 18,
-                        weight: FontWeight.bold,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: CustomText(
-                        text: "\$${appState.ridePrice}",
-                        size: 18,
-                        weight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
                 Padding(
                   padding: const EdgeInsets.all(12),
                   child: ElevatedButton(

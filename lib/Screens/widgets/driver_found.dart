@@ -198,8 +198,7 @@ class DriverFoundWidget extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => MainScreen()),
                               (route) => false);
-                          // Navigator.of(context).pop();
-                          //appState.cancelRequest();
+                          appState.cancelRequest();
                         },
                         submitButtonText: 'Submit',
                       );

@@ -11,11 +11,10 @@ import 'package:provider/provider.dart';
 import '../helpers/style.dart';
 import 'custom_text.dart';
 
-class PaymentMethodSelectionWidget extends StatelessWidget {
+class DriverAccepted extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldState;
 
-  const PaymentMethodSelectionWidget({Key key, this.scaffoldState})
-      : super(key: key);
+  const DriverAccepted({Key key, this.scaffoldState}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +122,6 @@ class PaymentMethodSelectionWidget extends StatelessWidget {
                                               LinearPercentIndicator(
                                                 lineHeight: 4,
                                                 animation: true,
-                                              
                                                 animationDuration: 100000,
                                                 percent: 1,
                                                 backgroundColor: Colors.grey

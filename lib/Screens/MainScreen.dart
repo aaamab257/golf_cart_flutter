@@ -9,7 +9,7 @@ import 'package:loginandregister_flutter/Screens/widgets/custom_text.dart';
 import 'package:loginandregister_flutter/Screens/widgets/destination_selection.dart';
 import 'package:loginandregister_flutter/Screens/widgets/driver_found.dart';
 import 'package:loginandregister_flutter/Screens/widgets/loading.dart';
-import 'package:loginandregister_flutter/Screens/widgets/payment_method_selection.dart';
+import 'package:loginandregister_flutter/Screens/widgets/looking_for_driver.dart';
 import 'package:loginandregister_flutter/Screens/widgets/pickup_selection_widget.dart';
 import 'package:loginandregister_flutter/Screens/widgets/trip_draggable.dart';
 import 'package:loginandregister_flutter/providers/app_state.dart';
@@ -175,8 +175,8 @@ class _MyHomePageState extends State<MainScreen> {
             ),
             //  ANCHOR Draggable PAYMENT METHOD
             Visibility(
-                visible: appState.show == Show.PAYMENT_METHOD_SELECTION,
-                child: PaymentMethodSelectionWidget(
+                visible: appState.show == Show.AcceptDriver,
+                child: DriverAccepted(
                   scaffoldState: scaffoldState,
                 )),
             //  ANCHOR Draggable DRIVER

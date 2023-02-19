@@ -25,7 +25,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 enum Show {
   DESTINATION_SELECTION,
   PICKUP_SELECTION,
-  PAYMENT_METHOD_SELECTION,
+  AcceptDriver,
   DRIVER_FOUND,
   TRIP
 }

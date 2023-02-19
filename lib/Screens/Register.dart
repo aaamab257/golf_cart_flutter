@@ -202,96 +202,52 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                                   borderRadius: BorderRadius.circular(30)),
                               child: TextButton(
                                 onPressed: () async {
-                                  if (!await authsProvider.signUp()) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content:
-                                                Text("Registration failed!")));
+                                  if (_nameController.text.isEmpty) {
+                                    showCustomSnackBar(
+                                        'Please Enter your name', context);
+                                  } else if (_phoneController.text.isEmpty) {
+                                    showCustomSnackBar(
+                                        'Please Enter your Phone number',
+                                        context);
+                                  } else if (_passwordController.text.isEmpty) {
+                                    showCustomSnackBar(
+                                        'Please Enter your Password', context);
+                                  } else if (_password2Controller
+                                      .text.isEmpty) {
+                                    showCustomSnackBar(
+                                        'Please Confirm your password',
+                                        context);
+                                  } else if (_passwordController.text !=
+                                      _password2Controller.text) {
+                                    showCustomSnackBar(
+                                        'Passwords do not match', context);
+                                  } else if (_phoneController.text.length >
+                                          10 &&
+                                      _phoneController.text.length < 10) {
+                                    showCustomSnackBar(
+                                        'Phone Number not valid', context);
+                                  } else if (!_phoneController.text
+                                      .startsWith('05')) {
+                                    showCustomSnackBar(
+                                        'Phone Number Must start with 05',
+                                        context);
+                                  } else {
+                                    if (!await authsProvider.signUp()) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(
+                                                  "Registration failed!")));
 
-                                    return;
+                                      return;
+                                    }
+                                    authsProvider.clearController();
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MainScreen()),
+                                        (route) => false);
                                   }
-                                  authsProvider.clearController();
-                                  Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MainScreen()),
-                                      (route) => false);
                                 },
-                                // if (_nameController.text.isEmpty) {
-                                //   showCustomSnackBar(
-                                //       'Please Enter your name',
-                                //       context);
-                                // } else if (_phoneController
-                                //     .text.isEmpty) {
-                                //   showCustomSnackBar(
-                                //       'Please Enter your Phone number',
-                                //       context);
-                                // } else if (_passwordController
-                                //     .text.isEmpty) {
-                                //   showCustomSnackBar(
-                                //       'Please Enter your Password',
-                                //       context);
-                                // } else if (_password2Controller
-                                //     .text.isEmpty) {
-                                //   showCustomSnackBar(
-                                //       'Please Confirm your password',
-                                //       context);
-                                // } else if (_passwordController.text !=
-                                //     _password2Controller.text) {
-                                //   showCustomSnackBar(
-                                //       'Passwords do not match',
-                                //       context);
-                                // } else if (_phoneController
-                                //             .text.length >
-                                //         10 &&
-                                //     _phoneController.text.length < 10) {
-                                //   showCustomSnackBar(
-                                //       'Phone Number not valid',
-                                //       context);
-                                // } else if (!_phoneController.text
-                                //     .startsWith('05')) {
-                                //   showCustomSnackBar(
-                                //       'Phone Number Must start with 05',
-                                //       context);
-                                // } else {
-                                //   String email = _emailController.text;
-                                //   String name = _nameController.text;
-                                //   String phone = _phoneController.text;
-                                //   String password =
-                                //       _passwordController.text;
-                                //   String password2 =
-                                //       _password2Controller.text;
-                                //   bool accountType =
-                                //       type == 'Student' ? false : true;
-                                //   SignUpModel signUpModel = SignUpModel(
-                                //       email: email,
-                                //       name: name,
-                                //       phone: phone,
-                                //       password: password,
-                                //       password2: password2,
-                                //       is_driver: accountType,
-                                //       is_admin: false);
-                                //   register
-                                //       .register(signUpModel)
-                                //       .then((status) {
-                                //     if (register.code == 201) {
-                                //       showCustomSnackBar(
-                                //           'Your account created successfully',
-                                //           context);
-                                //       Navigator.pushAndRemoveUntil(
-                                //           context,
-                                //           MaterialPageRoute(
-                                //               builder: (context) =>
-                                //                   MainScreen()),
-                                //           (route) => false);
-                                //     } else {
-                                //       showCustomSnackBar(
-                                //           'Something Error , please try again',
-                                //           context);
-                                //     }
-                                //   });
-                                // }
-
                                 style: TextButton.styleFrom(
                                   backgroundColor: Colors.blue,
                                   minimumSize: Size(

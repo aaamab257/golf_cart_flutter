@@ -122,7 +122,7 @@ class PickupSelectionWidget extends StatelessWidget {
                     onPressed: () async {
                       await appState.sendRequest();
                       appState.changeWidgetShowed(
-                          showWidget: Show.PAYMENT_METHOD_SELECTION);
+                          showWidget: Show.AcceptDriver);
                     },
                     child: Text(
                       "Comfirm Pickup",

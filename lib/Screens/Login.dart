@@ -151,21 +151,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                               borderRadius: BorderRadius.circular(30)),
                           child: TextButton(
                             onPressed: () async {
-                              if (!await authsProvider.signIn()) {
-                                print('in fun');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("Login failed")));
-                                return;
-                              }
-                              print('out of fun');
-                              authsProvider.clearController();
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainScreen()),
-                                  (route) => false);
-
-                              /*if (_emailController.text == '') {
+                              if (_emailController.text == '') {
                                 /*setState(() {
                                     _validateEmail = true;
                                   });*/
@@ -175,26 +161,39 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                                 showCustomSnackBar(
                                     'Please enter your Password', context);
                               } else {
-                                String email = _emailController.text;
-                                String password = _passwordController.text;
-                                authProvider
-                                    .login(email, password)
-                                    .then((status) async {
-                                  if (authProvider.code == 200) {
-                                    showCustomSnackBar(
-                                        'Login successfully', context);
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MainScreen()),
-                                        (route) => false);
-                                  } else if (authProvider.code == 404) {
-                                    showCustomSnackBar(
-                                        'Email or Password is not Valid',
-                                        context);
-                                  }
-                                });
-                              }*/
+                                // String email = _emailController.text;
+                                // String password = _passwordController.text;
+                                // authProvider
+                                //     .login(email, password)
+                                //     .then((status) async {
+                                //   if (authProvider.code == 200) {
+                                //     showCustomSnackBar(
+                                //         'Login successfully', context);
+                                //     Navigator.pushAndRemoveUntil(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //             builder: (context) => MainScreen()),
+                                //         (route) => false);
+                                //   } else if (authProvider.code == 404) {
+                                //     showCustomSnackBar(
+                                //         'Email or Password is not Valid',
+                                //         context);
+                                //   }
+                                // });
+                                if (!await authsProvider.signIn()) {
+                                  print('in fun');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("Login failed")));
+                                  return;
+                                }
+                                print('out of fun');
+                                authsProvider.clearController();
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MainScreen()),
+                                    (route) => false);
+                              }
                             },
                             style: TextButton.styleFrom(
                               backgroundColor: Colors.blue,
