@@ -202,31 +202,32 @@ class _RegisterPageScreenScreen extends State<RegisterPageScreen> {
                                   borderRadius: BorderRadius.circular(30)),
                               child: TextButton(
                                 onPressed: () async {
-                                  if (_nameController.text.isEmpty) {
+                                  if (authsProvider.name.text.isEmpty) {
                                     showCustomSnackBar(
                                         'Please Enter your name', context);
-                                  } else if (_phoneController.text.isEmpty) {
+                                  } else if (authsProvider.phone.text.isEmpty) {
                                     showCustomSnackBar(
                                         'Please Enter your Phone number',
                                         context);
-                                  } else if (_passwordController.text.isEmpty) {
+                                  } else if (authsProvider
+                                      .password.text.isEmpty) {
                                     showCustomSnackBar(
                                         'Please Enter your Password', context);
-                                  } else if (_password2Controller
-                                      .text.isEmpty) {
+                                  } else if (authsProvider
+                                      .confirmPass.text.isEmpty) {
                                     showCustomSnackBar(
                                         'Please Confirm your password',
                                         context);
-                                  } else if (_passwordController.text !=
-                                      _password2Controller.text) {
+                                  } else if (authsProvider.password.text !=
+                                      authsProvider.confirmPass.text) {
                                     showCustomSnackBar(
                                         'Passwords do not match', context);
-                                  } else if (_phoneController.text.length >
+                                  } else if (authsProvider.phone.text.length >
                                           10 &&
-                                      _phoneController.text.length < 10) {
+                                      authsProvider.phone.text.length < 10) {
                                     showCustomSnackBar(
                                         'Phone Number not valid', context);
-                                  } else if (!_phoneController.text
+                                  } else if (!authsProvider.phone.text
                                       .startsWith('05')) {
                                     showCustomSnackBar(
                                         'Phone Number Must start with 05',

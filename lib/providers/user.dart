@@ -32,6 +32,7 @@ class UserProvider with ChangeNotifier {
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController confirmPass = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController phone = TextEditingController();
 

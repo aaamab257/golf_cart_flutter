@@ -151,13 +151,13 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                               borderRadius: BorderRadius.circular(30)),
                           child: TextButton(
                             onPressed: () async {
-                              if (_emailController.text == '') {
+                              if (authsProvider.email.text == '') {
                                 /*setState(() {
                                     _validateEmail = true;
                                   });*/
                                 showCustomSnackBar(
                                     'Please enter your Email', context);
-                              } else if (_passwordController.text == '') {
+                              } else if (authsProvider.password.text == '') {
                                 showCustomSnackBar(
                                     'Please enter your Password', context);
                               } else {
